@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>作品详情 · 王品杰</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <style>
+      .detail-hero {
+        padding: 110px 0 56px;
+      }
+      .detail-hero .work-tag {
+        margin-bottom: 12px;
+      }
+      .detail-hero h1 {
+        font-size: clamp(30px, 5vw, 46px);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        margin-bottom: 18px;
+      }
+      .detail-meta {
+        display: flex;
+        gap: 36px;
+        flex-wrap: wrap;
+        margin-top: 22px;
+        border-top: 1px solid var(--line);
+        padding-top: 22px;
+      }
+      .detail-meta div .k {
+        font-size: 12.5px;
+        color: var(--faint);
+        letter-spacing: 0.04em;
+      }
+      .detail-meta div .v {
+        font-size: 15.5px;
+        font-weight: 550;
+      }
+      .detail-body {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 48px;
+        align-items: start;
+      }
+      .detail-body h3 {
+        font-size: 20px;
+        margin: 30px 0 14px;
+        letter-spacing: -0.01em;
+      }
+      .detail-body p {
+        color: var(--muted);
+        margin-bottom: 16px;
+        font-size: 16px;
+      }
+      .duties {
+        list-style: none;
+      }
+      .duties li {
+        padding: 12px 0 12px 26px;
+        position: relative;
+        border-bottom: 1px solid var(--line);
+        color: var(--ink);
+        font-size: 15px;
+      }
+      .duties li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .tech-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .tech-row span {
+        border: 1px solid var(--line);
+        background: var(--bg);
+        padding: 6px 13px;
+        border-radius: 999px;
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .gallery div {
+        height: 96px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #1a2233, #0f1622);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #44567a;
+        font-size: 15px;
+      }
+      .back {
+        margin-top: 8px;
+        display: inline-block;
+        color: var(--accent);
+        font-weight: 550;
+        font-size: 15px;
+      }
+      .notfound {
+        padding: 140px 0;
+        text-align: center;
+        color: var(--muted);
+      }
+      @media (max-width: 760px) {
+        .detail-body {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a href="index.html" class="brand">王品杰<span>.</span></a>
+        <nav class="nav-links">
+          <a href="index.html">首页</a>
+          <a href="index.html#about">关于</a>
+          <a href="index.html#skills">技能</a>
+          <a href="portfolio.html">作品集</a>
+          <a href="index.html#contact">联系</a>
+        </nav>
+        <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
+      </div>
+    </header>
+
+    <main id="app">
+      <div class="notfound">未找到该作品。</div>
+    </main>
+
+    <footer>
+      <div class="wrap footer-inner">
+        <span>© 2026 王品杰 · 电气工程师</span>
+        <span><a href="portfolio.html">← 返回作品集</a></span>
+      </div>
+    </footer>
+
+    <script src="assets/js/works-data.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+      (function () {
+        var slug = new URLSearchParams(location.search).get("p");
+        var w = window.WORKS && window.WORKS[slug];
+        var app = document.getElementById("app");
+        if (!w) {
+          app.innerHTML =
+            '<div class="notfound">未找到该作品。<br><a class="back" href="portfolio.html">← 返回作品集</a></div>';
+          document.title = "未找到 · 王品杰";
+          return;
+        }
+        document.title = w.title + " · 王品杰";
+        var duties = w.duties
+          .map(function (d) {
+            return "<li>" + d + "</li>";
+          })
+          .join("");
+        var tech = w.tech
+          .map(function (t) {
+            return "<span>" + t + "</span>";
+          })
+          .join("");
+        var gallery = (w.gallery || [])
+          .map(function (g) {
+            return "<div>" + g + "</div>";
+          })
+          .join("");
+        var overview = w.overview
+          .map(function (p) {
+            return "<p>" + p + "</p>";
+          })
+          .join("");
+
+        app.innerHTML =
+          '<section class="detail-hero"><div class="wrap reveal">' +
+          '<a class="back" href="portfolio.html">← 作品集</a>' +
+          '<div class="work-tag">' + w.tag + "</div>" +
+          "<h1>" + w.title + "</h1>" +
+          '<p class="lead">' + w.summary + "</p>" +
+          '<div class="detail-meta">' +
+          '<div><div class="k">年份</div><div class="v">' + w.year + "</div></div>" +
+          '<div><div class="k">客户 / 平台</div><div class="v">' + w.client + "</div></div>" +
+          '<div><div class="k">我的角色</div><div class="v">' + w.role + "</div></div>" +
+          "</div></div></section>" +
+          '<section style="padding-top:8px"><div class="wrap detail-body">' +
+          '<div class="reveal"><div class="eyebrow">项目概述</div>' + overview +
+          "<h3>主要职责</h3><ul class=\"duties\">" + duties + "</ul>" +
+          "<h3>相关产出</h3><div class=\"gallery\">" + gallery + "</div></div>" +
+          '<aside class="reveal"><div class="eyebrow">技术栈</div>' +
+          '<div class="tech-row">' + tech + "</div>" +
+          '<p style="margin-top:22px;font-size:14px;color:var(--faint)">想了解更多或探讨合作，' +
+          '<a class="back" href="index.html#contact">联系我 →</a></p></aside>' +
+          "</div></section>";
+      })();
+    </script>
+  </body>
+</html>
